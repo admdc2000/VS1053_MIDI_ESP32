@@ -268,6 +268,11 @@ public:
       Send Control Change #10 (Pan) for given channel. pan: 0..127
     */
     void setPan(uint8_t channel, uint8_t pan) {
+        if (pan > 127) {
+            if (debug) Serial.println("[MIDI] Warning: Pan value too high! Clamping to 127.");
+            pan = 127;
+        }
+    
         talkMIDI(0xB0 | (channel & 0x0F), 10, pan); // CC#10 = Pan
         if (debug) Serial.printf("[MIDI] setPan ch=%d pan=%d\n", channel, pan);
     }
@@ -278,6 +283,10 @@ public:
       bass: 0..15
     */
     void setBassBoost(uint8_t bass) {
+        if (bass > 15) {
+            if (debug) Serial.println("[MIDI] Warning: Bass boost value too high! Clamping to 15.");
+            bass = 15;
+        }
         writeRegister(0x02, (bass & 0x0F) << 4, 0x00);
         if (debug) Serial.printf("[MIDI] setBassBoost=%d\n", bass);
     }
@@ -287,6 +296,10 @@ public:
       Send CC#91 (Reverb Send). value: 0..127
     */
     void setReverb(uint8_t reverb) {
+        if (reverb > 127) {
+            if (debug) Serial.println("[MIDI] Warning: Reverb value too high! Clamping to 127.");
+            reverb = 127;
+        }
         talkMIDI(0xB0, 91, reverb); // CC#91 = Reverb Send
         if (debug) Serial.printf("[MIDI] setReverb=%d\n", reverb);
     }
@@ -296,6 +309,11 @@ public:
       Send CC#7 (Master Volume). value: 0..127
     */
     void setMasterVolume(uint8_t volume) {
+        if (volume > 127) {
+            if (debug) Serial.println("[MIDI] Warning: Master volume value too high! Clamping to 127.");
+            volume = 127;
+        }
+    
         talkMIDI(0xB0, 7, volume); // CC#7 = Master Volume
         if (debug) Serial.printf("[MIDI] setMasterVolume=%d\n", volume);
     }
@@ -305,6 +323,11 @@ public:
       Send CC#7 on a specific channel (Channel Volume).
     */
     void setChannelVolume(uint8_t channel, uint8_t volume) {
+        if (volume > 127) {
+            if (debug) Serial.println("[MIDI] Warning: Channel volume value too high! Clamping to 127.");
+            volume = 127;
+        }
+    
         talkMIDI(0xB0 | (channel & 0x0F), 7, volume);
         if (debug) Serial.printf("[MIDI] setChannelVolume ch=%d vol=%d\n", channel, volume);
     }
